@@ -1,84 +1,10 @@
 import React, { Component, } from 'react'
 import { Card, } from 'material-ui/Card'
-import { palette } from '../../theme/Theme'
-import avatarTypes from '../../const/avatarTypes'
-import { Avatar, } from 'material-ui'
-import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle'
-import appointmentStatus from '../../const/appointmentStatus'
-import moment from 'moment'
 import { Grid, Cell } from 'react-mdl'
 
 class AppointmentCard extends Component {
   constructor(props) {
     super(props)
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const response = (
-      JSON.stringify(this.props.appointment) !== JSON.stringify(nextProps.appointment) ||
-      JSON.stringify(this.props.recentlyCreated) !== JSON.stringify(nextProps.recentlyCreated) ||
-      JSON.stringify(this.props.site) !== JSON.stringify(nextProps.site)
-    )
-    if (response) {
-      this.checkForRecentlyCreated()
-    }
-    return response
-  }
-
-  checkForRecentlyCreated() {
-    if (
-      this.props.recentlyCreated === this.props.appointmentId &&
-      !this.recentlyCreatedTimeout
-    ) {
-      this.recentlyCreatedTimeout = setTimeout(() => {
-        this.props.clearRecentlyCreated()
-        this.recentlyCreatedTimeout = null
-      }, 10000)
-    }
-  }
-
-  formatTimePassed(timestamp) {
-    let passed = Math.floor((Date.now() - timestamp) / 1000)
-    let formatted = ''
-    if (passed >= 86400) {
-      let days = Math.floor(passed / 86400)
-      passed = passed - (days * 86400)
-      formatted = formatted + days + ' days '
-    }
-    if (passed >= 3600) {
-      let hours = Math.floor(passed / 3600)
-      passed = passed - (hours * 3600)
-      formatted = formatted + hours + ' hours '
-    }
-    if (passed >= 60) {
-      let minutes = Math.floor(passed / 60)
-      passed = passed - (minutes * 60)
-      formatted = formatted + minutes + ' minutes '
-    }
-    formatted = formatted + passed + ' seconds '
-    return formatted
-  }
-
-  formatStatusAndTimestamp(appointment) {
-    let formatted = []
-    switch (appointment.status) {
-      case appointmentStatus.UNASSIGNED:
-        formatted = ['Created', moment(appointment.createdAt).fromNow()]
-        break
-      case appointmentStatus.ASSIGNED:
-        formatted = ['Assigned', moment(appointment.assignedAt).fromNow()]
-        break
-      case appointmentStatus.APPROACHING:
-        formatted = ['Started driving', moment(appointment.departedAt).fromNow()]
-        break
-      case appointmentStatus.ARRIVED:
-        formatted = ['Arrived', moment(appointment.arrivedAt).fromNow()]
-        break
-      case appointmentStatus.COMPLETED:
-        formatted = ['Work Order Submitted', moment(appointment.completedAt).fromNow()]
-        break
-    }
-    return formatted
   }
 
   render() {
